@@ -13,7 +13,7 @@
 //
 //    Copyright (c) Alain Metge
 //
-import { Main } from "./Main";
+import { Main } from "./Runner";
 import { Options } from "./Options";
 
 const updateNotifier = require('update-notifier');
