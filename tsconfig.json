@@ -8,11 +8,11 @@
         "moduleResolution": "node",
         "target": "es6",
         "sourceMap": true,
-        "outDir": "dist",
+        "outDir": "lib",
         "rootDir": "."
     },
     "exclude": [
         "node_modules",
-        "dist"
+        "lib"
     ]
 }

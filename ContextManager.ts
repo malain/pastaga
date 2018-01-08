@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as Path from 'path';
 import { Options } from './Options';
+const chalk = require('chalk');
 
 // options:
 //   context name [--set key=value] [--address address]
@@ -25,9 +26,10 @@ export class ContextManager
         if (this.options.getCommand() !== "context") {
             let currentContextName = this.options["--context"] || this.options["--ctx"] || this._configSettings.defaultContext;
             this._currentContext = (this._configSettings && this._configSettings[currentContextName]) || { name: currentContextName };                      
+            console.log(chalk.bold(`Using '${currentContextName}' context.`));
             return;
         }
-        
+          
         let currentContextName = this.options.GetGlobalArgs(1);
         if (!currentContextName) {            
             throw new Error("Invalid command context. You must provide a context name.");
@@ -67,6 +69,7 @@ export class ContextManager
         
         if (saveConfigs) {
             fs.writeFileSync(settingsFile, JSON.stringify(this._configSettings));
+            console.log(chalk.yellow("Configuration updated."))
         }
         return true;
     }

@@ -2,6 +2,7 @@ import * as shell from 'shelljs';
 import * as fs from 'fs';
 import * as Path from 'path';
 import { Utils } from './Utils';
+const chalk = require('chalk');
 
 export class CloneManager {
 
@@ -9,6 +10,7 @@ export class CloneManager {
     
     public clone(gitUrl: string, branch: string = "master") {
         if (gitUrl) {
+            console.log(chalk.gray("Updating templates from " + gitUrl));
             shell.cd(this.apotekFolder);
             try {
                 if ((<any>shell.exec(`git clone ${gitUrl} templates`, { silent: true })).code > 0) {
@@ -39,6 +41,7 @@ export class CloneManager {
                 if (fs.existsSync(manifestFile)) {
                     let manifest = JSON.parse(fs.readFileSync(manifestFile, "utf8"));
                     manifest.name = manifest.name || name;
+                    // {name:string, value:string}
                     yield manifest;
                 }
                 else {

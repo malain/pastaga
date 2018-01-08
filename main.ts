@@ -24,6 +24,8 @@ export class Main {
             return;
         }
 
+        console.log('');
+
         const commands = Array.from(cm.getCommands());
         if (commands.length > 0) {
             let command = options.getCommand();
