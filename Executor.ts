@@ -54,15 +54,8 @@ export class Executor {
         return this._commandFolder;
     }
 
-    /**
-     * Current command name
-     */
-    public get commandName() {
-        return this.command.name;
-    }
 
-    constructor(private _commandFolder: string, private command: any, private _currentFolder:string) {
-        this._commandFolder = Path.join(this._commandFolder, command.name);
+    constructor(private _commandFolder: string, private _currentFolder:string) {
         const manifestFile = Path.join(this._commandFolder, "manifest.json");
         if (fs.existsSync(manifestFile)) {
             let manifest = JSON.parse(fs.readFileSync(manifestFile, "utf8"));

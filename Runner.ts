@@ -3,6 +3,7 @@ import { Options } from "./Options";
 import { Utils } from "./Utils";
 import { CloneManager } from "./CloneManager";
 import { Executor } from "./Executor";
+import * as Path from 'path';
 const inquirer =require('inquirer');
 
 export class Main {
@@ -12,7 +13,7 @@ export class Main {
 
         let contextManager = new ContextManager(options, folders.apotek);
         try {
-            if (contextManager.run())
+            if (await contextManager.run())
                 return;
         }
         catch (e) {
@@ -38,6 +39,7 @@ export class Main {
             }
 
             let state = contextManager.getState();
+            let commandFolder = folders.apotek;
             while (command) {
                 const cmd = commands.find(c => c.name === command);
                 if ( !cmd ) {
@@ -45,7 +47,8 @@ export class Main {
                     return;
                 }
 
-                const executor = new Executor(folders.apotek, cmd, folders.cwd);
+                commandFolder = Path.join(commandFolder, cmd.name);
+                const executor = new Executor(commandFolder, folders.cwd);
                 try {
                     command = await executor.execute(state);
                 }

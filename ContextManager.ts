@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import * as Path from 'path';
 import { Options } from './Options';
 const chalk = require('chalk');
+const inquirer =require('inquirer');
 
 // options:
 //   context name [--set key=value] [--address address]
@@ -14,7 +15,7 @@ export class ContextManager
     constructor(private options: Options, private apotekFolder:string) {
     }
 
-    public run() {        
+    public async run() {        
         const settingsFile = Path.join(this.apotekFolder, "settings.json");
         if (fs.existsSync(settingsFile)) {
             this._configSettings = JSON.parse(fs.readFileSync(settingsFile, "utf8"));
@@ -24,13 +25,28 @@ export class ContextManager
         }
 
         if (this.options.getCommand() !== "context") {
-            let currentContextName = this.options["--context"] || this.options["--ctx"] || this._configSettings.defaultContext;
-            this._currentContext = (this._configSettings && this._configSettings[currentContextName]) || { name: currentContextName };                      
+            let currentContextName = this.options["--context"] || this.options["--ctx"];
+            if (currentContextName === true) {
+                throw new Error("Invalid context. You must provide a context name.");  
+            }
+            
+            if (!currentContextName)
+                currentContextName = this._configSettings.defaultContext;
+            
+            this._currentContext = (this._configSettings && this._configSettings[currentContextName]); 
+            if(!this._currentContext)
+                throw new Error("Invalid context. You must provide a valid context name.");  
             console.log(chalk.bold(`Using '${currentContextName}' context.`));
             return;
         }
-          
+        
         let currentContextName = this.options.GetGlobalArgs(1);
+        if (!currentContextName) {
+            let choices = Object.keys(this._configSettings).filter(k => typeof this._configSettings[k] === "object").map(k => ({ name: k }));
+            if(choices.length > 0)
+                currentContextName = await inquirer.prompt([{ name: "context", type: "list", default: this._configSettings.defaultContext, choices }]);
+        }
+          
         if (!currentContextName) {            
             throw new Error("Invalid command context. You must provide a context name.");
         }
@@ -51,11 +67,21 @@ export class ContextManager
         saveConfigs = this.processOption("address") || saveConfigs;    
         saveConfigs = this.processOption("branch") || saveConfigs;    
 
-        let values: string[] = this.options.getOptions("set");        
+        saveConfigs = this.processSet() || saveConfigs;
+        saveConfigs = this.processUnset() || saveConfigs;
+        
+        if (saveConfigs) {
+            fs.writeFileSync(settingsFile, JSON.stringify(this._configSettings));
+            console.log(chalk.yellow("Configuration updated."))
+        }
+        return true;
+    }
+
+    private processSet(): boolean {
+        let values: string[] = this.options.getOptions("set");
         if (values) {
             if (!Array.isArray(values))
                 values = [values];
-            
             for (let val of values) {
                 let parts = val.split('=');
                 if (parts.length === 2) {
@@ -63,15 +89,22 @@ export class ContextManager
                     this._currentContext[parts[0]] = parts[1];
                 }
             }
+            return true;
+        }
+        return false;
+    }
 
-            saveConfigs = true;
+    private processUnset(): boolean {
+        let values: string[] = this.options.getOptions("unset");
+        if (values && this._currentContext["globals"]) {
+            if (!Array.isArray(values))
+                values = [values];
+            for (let val of values) {
+                this._currentContext["globals"][val] = undefined;
+            }
+            return true;
         }
-        
-        if (saveConfigs) {
-            fs.writeFileSync(settingsFile, JSON.stringify(this._configSettings));
-            console.log(chalk.yellow("Configuration updated."))
-        }
-        return true;
+        return false;
     }
 
     private processOption(name: string): boolean {
