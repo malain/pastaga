@@ -20,6 +20,6 @@ export class Options {
 
     public GetGlobalArgs(idx:number): string {
         let g = (this._args.length >= idx + 1 && this._args[idx]) || null;
-        return g ? Object.assign({}, g) : {};
+        return g || {};
     }
 }

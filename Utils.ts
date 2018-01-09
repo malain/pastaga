@@ -29,7 +29,7 @@ export class Utils {
         let names = fs.readdirSync(templatesFolder);
         for (let name of names) {
             try {
-                if (name[0] === ".")
+                if (name[0] === "." || name[0] === "$")
                     continue;
 
                 const fullName = Path.join(templatesFolder, name);

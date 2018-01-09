@@ -50,7 +50,7 @@ export class Executor {
         let Context = require(Path.join(this._commandFolder, folder, 'context')).Context;
                     
         let ctx = new Context();
-        ctx.state = Object.assign({}, state);
+        ctx.state = state;
         ctx.context = this;
         await Promise.all([this.getPrompts(ctx)]);
         return ctx;
