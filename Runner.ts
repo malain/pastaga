@@ -6,6 +6,13 @@ import { Executor } from "./Executor";
 import * as Path from 'path';
 const inquirer =require('inquirer');
 
+export interface ExecutionContext {
+    commandFolder: string;
+    currentFolder: string;
+    command: string;
+    entryPoint?: string;
+}
+
 export class Main {
 
     public async run(options: Options) {
@@ -32,7 +39,12 @@ export class Main {
             let command = options.getCommand();
             if (!command) {
                 // select command
-                let res = await inquirer.prompt([{ name: "command", type:"list", message: "Select a command", choices: commands.concat("quit")}]);
+                let res = await inquirer.prompt([{
+                    name: "command",
+                    type: "list",
+                    message: "Select a command",
+                    choices: commands.concat("quit")
+                }]);
                 command = res.command;
                 if (command === "quit")
                     return;    
@@ -48,8 +60,16 @@ export class Main {
                 }
 
                 commandFolder = Path.join(commandFolder, cmd.name);
-                const executor = new Executor(commandFolder, folders.cwd);
+                let ctx: ExecutionContext = {
+                    commandFolder,
+                    command: cmd.name,
+                    currentFolder: folders.cwd,
+                    entryPoint: cmd.entryPoint
+                };
+                const executor = new Executor(ctx);
                 try {
+                    if (cmd.state)
+                        state = Object.assign(cmd.state, state);    
                     command = await executor.execute(state);
                 }
                 catch (e) {

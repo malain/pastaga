@@ -24,8 +24,11 @@ export class Utils {
         return { cwd, apotek };
     }
 
-    static getDirectories(templatesFolder: string=".") {
-        let list = new Array <string> ();
+    static getDirectories(templatesFolder: string=".", level=1) {
+        return Array.from(Utils.getDirectoriesInternal(templatesFolder, null, level, 1));
+    }
+
+    static *getDirectoriesInternal(templatesFolder: string, templateName:string, maxLevel:number, level: number): IterableIterator<string> {
         let names = fs.readdirSync(templatesFolder);
         for (let name of names) {
             try {
@@ -35,14 +38,22 @@ export class Utils {
                 const fullName = Path.join(templatesFolder, name);
                 const stat = fs.statSync(fullName);
                 if (!stat.isDirectory())
-                    continue;            
-                list.push(name);
+                    continue;          
+                
+                let tn = templateName ? templateName + Path.sep + name : name;
+                if (level < maxLevel) {
+                    let hasDirectories = false;           
+                    for (let dir of Utils.getDirectoriesInternal(fullName, tn, maxLevel, level + 1)) {
+                        hasDirectories = true;
+                        yield tn + Path.sep + dir;
+                    }
+                }
+                yield tn;
             }
             catch (e) {
                 console.log(e.message);
                 // ignore
             }
         }
-        return list;
     }
 }

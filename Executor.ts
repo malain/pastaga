@@ -1,6 +1,7 @@
 import * as Path from 'path';
 import { Utils } from './Utils';
 import * as shell from 'shelljs';
+import { ExecutionContext } from './Runner';
 
 const inquirer =require('inquirer');
 const fs = require('fs');
@@ -44,34 +45,44 @@ export class Executor {
      * Get the current folder 
      */
     public get currentFolder() {
-        return this._currentFolder;
+        return this._executionContext.currentFolder;
     }
 
     /**
      * Current command template folder
      */
     public get commandFolder() {
-        return this._commandFolder;
+        return this._executionContext.commandFolder;
     }
 
-
-    constructor(private _commandFolder: string, private _currentFolder:string) {
-        const manifestFile = Path.join(this._commandFolder, "manifest.json");
-        if (fs.existsSync(manifestFile)) {
-            let manifest = JSON.parse(fs.readFileSync(manifestFile, "utf8"));
-            console.log(chalk.bold(manifest.description));
-        }
+    constructor(private _executionContext:ExecutionContext) {
     }
 
     public async execute(state?: any): Promise<string> {
+        console.log(chalk.bold("Running command " + this._executionContext.command));
         let ctx:any = await this.createContextAsync("", state);
         let nextCommand = await ctx.exec();
         return nextCommand;
     } 
 
     public async createContextAsync(folder:string, state) {
-        let Context = require(Path.join(this._commandFolder, folder, 'context')).Context;
-                    
+        let Context;
+        if (this._executionContext.entryPoint)
+            Context = require(Path.join(this._executionContext.commandFolder, folder, this._executionContext.entryPoint)).Context;
+        else {
+            try {
+                Context = require(Path.join(this._executionContext.commandFolder, folder, 'index')).Context;
+            }
+            catch {
+                try {
+                    Context = require(Path.join(this._executionContext.commandFolder, folder, 'Index')).Context;
+                }
+                catch {
+                    throw new Error("Unable to load entrypoint index.js");
+                }
+            }    
+        }       
+
         let ctx = new Context();
         ctx.state = state;
         ctx.context = this;

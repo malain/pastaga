@@ -37,12 +37,23 @@ export class CloneManager {
             try {
                 const fullName = Path.join(this.apotekFolder, name);
                
+                // Manifest can be an object or an array
                 const manifestFile = Path.join(fullName, "manifest.json");
                 if (fs.existsSync(manifestFile)) {
                     let manifest = JSON.parse(fs.readFileSync(manifestFile, "utf8"));
-                    manifest.name = manifest.name || name;
-                    // {name:string, value:string}
-                    yield manifest;
+                    if (Array.isArray(manifest)) {
+                        for (let m of manifest) {
+                            m.name = m.name || name;
+                            m.value = m.description;
+                            yield m;
+                        }
+                    }
+                    else {
+                        // {name:string, value?:string, entryPoint?: contextfile, state?: any}
+                        manifest.name = manifest.name || name;
+                        manifest.value = manifest.description;
+                        yield manifest;
+                    }    
                 }
                 else {
                     yield { name };
