@@ -1,11 +1,12 @@
 {
   "name": "apotek",
-  "version": "1.0.0-beta2",
+  "version": "1.0.0-beta3",
   "description": "",
   "main": "dist/index.js",
   "dependencies": {
     "chalk": "^2.3.0",
     "ejs": "^2.5.7",
+    "glob": "^7.1.2",
     "inquirer": "^4.0.2",
     "inquirer-autocomplete-prompt": "^0.12.1",
     "minimist": "^1.2.0",

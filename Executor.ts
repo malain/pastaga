@@ -8,10 +8,18 @@ const fs = require('fs');
 const ejs = require('ejs');
 const unirest = require('unirest');
 const chalk = require('chalk');
+const glob = require('glob');
 
 export class Executor {
     private state = {};
     private ctx;
+
+     /**
+     * Expose chalk package
+     */
+    public get glob() {
+        return glob;
+    }
 
     /**
      * Expose chalk package
@@ -68,22 +76,27 @@ export class Executor {
     public async createContextAsync(folder:string, state) {
         let Context;
         if (this._executionContext.entryPoint)
-            Context = require(Path.join(this._executionContext.commandFolder, folder, this._executionContext.entryPoint)).Context;
+            Context = require(Path.join(this._executionContext.commandFolder, folder, this._executionContext.entryPoint));
         else {
             try {
-                Context = require(Path.join(this._executionContext.commandFolder, folder, 'index')).Context;
+                Context = require(Path.join(this._executionContext.commandFolder, folder, 'index'));
             }
-            catch {
+            catch (e) {
+                if (e.code !== "MODULE_NOT_FOUND")
+                    throw e;
+                
                 try {
-                    Context = require(Path.join(this._executionContext.commandFolder, folder, 'Index')).Context;
+                    Context = require(Path.join(this._executionContext.commandFolder, folder, 'Index'));
                 }
-                catch {
+                catch(e2) {
+                    if (e.code !== "MODULE_NOT_FOUND")
+                        throw e2;
                     throw new Error("Unable to load entrypoint index.js");
                 }
             }    
         }       
 
-        let ctx = new Context();
+        let ctx = new Context.default();
         ctx.state = state;
         ctx.context = this;
         await Promise.all([this.getPrompts(ctx)]);
