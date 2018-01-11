@@ -1,10 +1,11 @@
 import { ContextManager } from "./ContextManager";
 import { Options } from "./Options";
-import { Utils } from "./Utils";
+import { Utils, IManifest } from "./Utils";
 import { CloneManager } from "./CloneManager";
 import { Executor } from "./Executor";
 import * as Path from 'path';
-const inquirer =require('inquirer');
+const inquirer = require('inquirer');
+const chalk = require('chalk');
 
 export interface ExecutionContext {
     commandFolder: string;
@@ -26,15 +27,15 @@ export class Main {
         catch (e) {
             console.log(e.message);
         }
-        
+
         let cm = new CloneManager(folders.apotek);
-        if (!(folders.apotek = cm.clone(contextManager.currentContext["address"], contextManager.currentContext["branch"]))) { 
+        if (!(folders.apotek = cm.clone(contextManager.currentContext["address"], contextManager.currentContext["branch"]))) {
             return;
         }
 
         console.log('');
 
-        const commands = Array.from(cm.getCommands());
+        const commands = cm.getCommands();
         if (commands.length > 0) {
             let command = options.getCommand();
             if (!command) {
@@ -43,18 +44,18 @@ export class Main {
                     name: "command",
                     type: "list",
                     message: "Select a command",
-                    choices: commands.concat("quit")
+                    choices: commands.concat({ name: "quit" })
                 }]);
                 command = res.command;
                 if (command === "quit")
-                    return;    
+                    return;
             }
 
             let state = contextManager.getState();
             let commandFolder = folders.apotek;
             while (command) {
                 const cmd = commands.find(c => c.name === command);
-                if ( !cmd ) {
+                if (!cmd) {
                     console.log("Unknown command " + command);
                     return;
                 }
@@ -69,14 +70,14 @@ export class Main {
                 const executor = new Executor(ctx);
                 try {
                     if (cmd.state)
-                        state = Object.assign(cmd.state, state);    
+                        state = Object.assign(cmd.state, state);
                     command = await executor.execute(state);
                 }
                 catch (e) {
-                    console.log(e);
+                    console.log(chalk.red("Error : " + e));
                     break;
                 }
-            }    
-        }        
+            }
+        }
     }
 }

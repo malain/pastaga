@@ -1,7 +1,7 @@
 import * as shell from 'shelljs';
 import * as fs from 'fs';
 import * as Path from 'path';
-import { Utils } from './Utils';
+import { Utils, IManifest } from './Utils';
 const chalk = require('chalk');
 
 export class CloneManager {
@@ -32,37 +32,7 @@ export class CloneManager {
         return null;
     }
 
-    public *getCommands() {
-        for (let name of Utils.getDirectories(this.apotekFolder)) {
-            try {
-                const fullName = Path.join(this.apotekFolder, name);
-               
-                // Manifest can be an object or an array
-                const manifestFile = Path.join(fullName, "manifest.json");
-                if (fs.existsSync(manifestFile)) {
-                    let manifest = JSON.parse(fs.readFileSync(manifestFile, "utf8"));
-                    if (Array.isArray(manifest)) {
-                        for (let m of manifest) {
-                            m.name = m.name || name;
-                            m.value = m.description;
-                            yield m;
-                        }
-                    }
-                    else {
-                        // {name:string, value?:string, entryPoint?: contextfile, state?: any}
-                        manifest.name = manifest.name || name;
-                        manifest.value = manifest.description;
-                        yield manifest;
-                    }    
-                }
-                else {
-                    yield { name };
-                }
-            }
-            catch (e) {
-                console.log(e.message);
-                // ignore
-            }
-        }
+    public getCommands() {
+        return Utils.getCommands(this.apotekFolder);
     }
 }

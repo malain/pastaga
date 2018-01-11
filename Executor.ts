@@ -1,5 +1,5 @@
 import * as Path from 'path';
-import { Utils } from './Utils';
+import { Utils, IManifest } from './Utils';
 import * as shell from 'shelljs';
 import { ExecutionContext } from './Runner';
 
@@ -63,6 +63,10 @@ export class Executor {
         return this._executionContext.commandFolder;
     }
 
+    public get entryPoint() {
+        return this._executionContext.entryPoint;
+    }
+
     constructor(private _executionContext:ExecutionContext) {
     }
 
@@ -75,26 +79,15 @@ export class Executor {
 
     public async createContextAsync(folder:string, state) {
         let Context;
-        if (this._executionContext.entryPoint)
+        this._executionContext.entryPoint = this._executionContext.entryPoint || "index.js";
+        try {
             Context = require(Path.join(this._executionContext.commandFolder, folder, this._executionContext.entryPoint));
-        else {
-            try {
-                Context = require(Path.join(this._executionContext.commandFolder, folder, 'index'));
-            }
-            catch (e) {
-                if (e.code !== "MODULE_NOT_FOUND")
-                    throw e;
-                
-                try {
-                    Context = require(Path.join(this._executionContext.commandFolder, folder, 'Index'));
-                }
-                catch(e2) {
-                    if (e.code !== "MODULE_NOT_FOUND")
-                        throw e2;
-                    throw new Error("Unable to load entrypoint index.js");
-                }
-            }    
-        }       
+        }
+        catch (e) {
+            if (e.code !== "MODULE_NOT_FOUND")
+                throw e;
+            throw new Error("Unable to load entrypoint " + this._executionContext.entryPoint);
+        }
 
         let ctx = new Context.default();
         ctx.state = state;
@@ -103,8 +96,8 @@ export class Executor {
         return ctx;
     }
 
-    public getDirectories(templatesFolder: string=".") {
-        return Utils.getDirectories(templatesFolder);
+    public getTemplates(templatesFolder: string) {        
+        return Utils.getTemplates(templatesFolder);
     }
 
     private async getPrompts(ctx) {
