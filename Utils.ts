@@ -8,6 +8,7 @@ export interface IManifest {
     entryPoint?: string;
     state?: any
     description?: string;
+    dependencies?: string[];
 }
 
 export class Utils {

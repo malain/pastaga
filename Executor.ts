@@ -67,11 +67,17 @@ export class Executor {
         return this._executionContext.entryPoint;
     }
 
-    constructor(private _executionContext:ExecutionContext) {
+    constructor(private _executionContext: ExecutionContext) {
+        if (this._executionContext.dependencies) {
+            console.log(chalk.blue("Installing command dependencies"));
+            this._executionContext.dependencies.forEach(pkg => {
+                shell.exec("npm install " + pkg);
+            })
+        }
     }
 
     public async execute(state?: any): Promise<string> {
-        console.log(chalk.bold("Running command " + this._executionContext.command));
+        console.log(chalk.blue("Running command " + this._executionContext.command));
         let ctx:any = await this.createContextAsync("", state);
         let nextCommand = await ctx.exec();
         return nextCommand;

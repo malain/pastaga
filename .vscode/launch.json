@@ -12,7 +12,6 @@
                 "${workspaceFolder}/lib/**/*.js"
             ],
             "args": [
-                "init", "--template", "vulcainService", "--project", "test", "--outputFolder", ".", "--service", "test", "--domain", "test"
             ]
         }
     ]

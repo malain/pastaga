@@ -12,6 +12,7 @@ export interface ExecutionContext {
     currentFolder: string;
     command: string;
     entryPoint?: string;
+    dependencies?: string[];
 }
 
 export class Main {
@@ -65,7 +66,8 @@ export class Main {
                     commandFolder,
                     command: cmd.name,
                     currentFolder: folders.cwd,
-                    entryPoint: cmd.entryPoint
+                    entryPoint: cmd.entryPoint,
+                    dependencies: cmd.dependencies
                 };
                 const executor = new Executor(ctx);
                 try {
