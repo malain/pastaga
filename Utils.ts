@@ -57,14 +57,14 @@ export class Utils {
                     let manifest = JSON.parse(fs.readFileSync(manifestFile, "utf8"));
                     if (Array.isArray(manifest)) {
                         for (let m of manifest) {
-                            m.value = Utils.makeTemplateName(templateName, m.name || name);
-                            m.name = m.value + (m.description ? " - " + m.description : "");
+                            m.value = Utils.makeTemplateName(templateName, name);
+                            m.name = Utils.makeTemplateName(templateName, m.name || name) + (m.description ? " - " + m.description : "");
                             yield m;
                         }
                     }
                     else {                      
-                        manifest.value = Utils.makeTemplateName(templateName, manifest.name || name);
-                        manifest.name = manifest.value + (manifest.description ? " - " + manifest.description : "");
+                        manifest.value = Utils.makeTemplateName(templateName, name);
+                        manifest.name = Utils.makeTemplateName(templateName, manifest.name || name) + (manifest.description ? " - " + manifest.description : "");
                         yield manifest;
                     }
                 }
