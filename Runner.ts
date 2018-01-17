@@ -55,16 +55,16 @@ export class Main {
             let state = contextManager.getState();
             let commandFolder = folders.apotek;
             while (command) {
-                const cmd = commands.find(c => c.name === command);
+                const cmd = commands.find(c => c.value === command);
                 if (!cmd) {
                     console.log("Unknown command " + command);
                     return;
                 }
 
-                commandFolder = Path.join(commandFolder, cmd.name);
+                commandFolder = Path.join(commandFolder, cmd.value);
                 let ctx: ExecutionContext = {
                     commandFolder,
-                    command: cmd.name,
+                    command: cmd.value,
                     currentFolder: folders.cwd,
                     entryPoint: cmd.entryPoint,
                     dependencies: cmd.dependencies
