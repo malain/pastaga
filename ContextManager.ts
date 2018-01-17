@@ -15,7 +15,12 @@ export class ContextManager
     constructor(private options: Options, private apotekFolder:string) {
     }
 
-    public async run() {        
+    public async run() {     
+        if (this.options.getCommand() === "help") {
+            this.displayHelp();
+            return true;
+        }
+
         const settingsFile = Path.join(this.apotekFolder, "settings.json");
         if (fs.existsSync(settingsFile)) {
             this._configSettings = JSON.parse(fs.readFileSync(settingsFile, "utf8"));
@@ -25,7 +30,7 @@ export class ContextManager
         }
 
         if (this.options.getCommand() !== "context") {
-            let currentContextName = this.options["--context"] || this.options["--ctx"];
+            let currentContextName = this.options["--context"];
             if (currentContextName === true) {
                 throw new Error("Invalid context. You must provide a context name.");  
             }
@@ -90,7 +95,14 @@ export class ContextManager
                 this._configSettings.defaultContext = currentContextName;
             }
 
-            saveConfigs = this.processOption("address") || saveConfigs;
+            if (this.processOption("address")) {
+                saveConfigs = true;
+                console.log(chalk.cyan("SECURITY WARNING: You have added a new repository reference to use with Apotek."));
+                console.log(chalk.cyan("SECURITY WARNING: Ensure this repository is safe and it not run malicious code."));
+                console.log(chalk.cyan("SECURITY WARNING: Pay attention that this repository will be refreshed every time you use it."));
+                console.log(chalk.cyan("SECURITY WARNING: In doubt, do not use this repository with Apotek or use it has your own risk."));
+            }
+
             saveConfigs = this.processOption("branch") || saveConfigs;
             saveConfigs = this.processSet() || saveConfigs;
             saveConfigs = this.processUnset() || saveConfigs;
@@ -122,7 +134,14 @@ export class ContextManager
                 let parts = val.split('=');
                 if (parts.length === 2) {
                     this._currentContext["globals"] = this._currentContext["globals"] || {};
-                    this._currentContext[parts[0]] = parts[1];
+                    let val = parts[1];
+                    if (val && val.length > 1) {
+                        if (val[0] === '"' || val[0] === "'")
+                            val = val.substr(1);
+                        if (val[val.length - 1] === '"' || val[val.length - 1] === "'")
+                            val = val.substr(0, val.length - 1);
+                        this._currentContext[parts[0]] = val;
+                    }
                 }
             }
             return true;
@@ -158,5 +177,11 @@ export class ContextManager
 
     public get currentContext() {
         return Object.assign({}, this._currentContext);
+    }
+
+    private displayHelp() {
+        console.log("apotek context <context> [--address <url>] [--branch <branch>] [--set <key=value>] [--unset <value>]");
+        console.log("apotek [--context <context>] [command] [options]");
+        console.log("");
     }
 }
