@@ -1,14 +1,13 @@
 {
   "name": "apotek",
-  "version": "1.0.0-beta8",
+  "version": "1.0.0-beta904",
   "description": "",
-  "main": "dist/index.js",
+  "main": "lib/Apotek.js",
   "dependencies": {
     "chalk": "^2.3.0",
     "ejs": "^2.5.7",
     "glob": "^7.1.2",
     "inquirer": "^4.0.2",
-    "inquirer-autocomplete-prompt": "^0.12.1",
     "minimist": "^1.2.0",
     "shelljs": "^0.7.8",
     "unirest": "^0.5.1",

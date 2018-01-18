@@ -13,7 +13,7 @@
 //
 //    Copyright (c) Alain Metge
 //
-import { Main } from "./Runner";
+import Apotek from "./Apotek";
 import { Options } from "./Options";
 
 const updateNotifier = require('update-notifier');
@@ -24,5 +24,5 @@ updateNotifier({ pkg }).notify({ defer: false });
 console.log(`Apotek ${pkg.version}`);
 
 const options = new Options();
-const main = new Main();
+const main = new Apotek();
 main.run(options);

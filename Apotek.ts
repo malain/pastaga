@@ -1,5 +1,5 @@
 import { ContextManager } from "./ContextManager";
-import { Options } from "./Options";
+import { IOptions, TestOptions } from "./Options";
 import { Utils, IManifest } from "./Utils";
 import { CloneManager } from "./CloneManager";
 import { Executor } from "./Executor";
@@ -15,12 +15,14 @@ export interface ExecutionContext {
     dependencies?: string[];
 }
 
-export class Main {
+export default class Apotek {
 
-    public async run(options: Options) {
-        let folders = Utils.ensuresApotekFolder();
+    public test(commandName: string, state: any) {
+        return this.run(new TestOptions(commandName, state));
+    }
 
-        let contextManager = new ContextManager(options, folders.apotek);
+    public async run(options: IOptions) {
+        let contextManager = new ContextManager(options);
         try {
             if (await contextManager.run())
                 return;
@@ -29,11 +31,10 @@ export class Main {
             console.log(e.message);
         }
 
-        let cm = new CloneManager(folders.apotek);
-        if (!(folders.apotek = cm.clone(contextManager.currentContext["address"], contextManager.currentContext["branch"]))) {
+        let cm = new CloneManager(options.apotekFolder);
+        if (!options.isTestMode && !(options.apotekFolder = cm.clone(contextManager.currentContext["address"], contextManager.currentContext["branch"]))) {
             return;
         }
-
         console.log('');
 
         const commands = cm.getCommands();
@@ -53,7 +54,7 @@ export class Main {
             }
 
             let state = contextManager.getState();
-            let commandFolder = folders.apotek;
+            let commandFolder = options.apotekFolder;
             while (command) {
                 const cmd = commands.find(c => c.value === command);
                 if (!cmd) {
@@ -65,7 +66,7 @@ export class Main {
                 let ctx: ExecutionContext = {
                     commandFolder,
                     command: cmd.value,
-                    currentFolder: folders.cwd,
+                    currentFolder: options.currentFolder,
                     entryPoint: cmd.entryPoint,
                     dependencies: cmd.dependencies
                 };

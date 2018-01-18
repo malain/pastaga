@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as Path from 'path';
-import { Options } from './Options';
+import { IOptions } from './Options';
 const chalk = require('chalk');
 const inquirer =require('inquirer');
 
@@ -10,9 +10,9 @@ const inquirer =require('inquirer');
 export class ContextManager     
 {
     private _currentContext: any;
-    private _configSettings:any;
+    private _configSettings: any;
 
-    constructor(private options: Options, private apotekFolder:string) {
+    constructor(private options: IOptions) {
     }
 
     public async run() {     
@@ -21,7 +21,7 @@ export class ContextManager
             return true;
         }
 
-        const settingsFile = Path.join(this.apotekFolder, "settings.json");
+        const settingsFile = Path.join(this.options.apotekFolder, "settings.json");
         if (fs.existsSync(settingsFile)) {
             this._configSettings = JSON.parse(fs.readFileSync(settingsFile, "utf8"));
         }
@@ -45,7 +45,7 @@ export class ContextManager
             return;
         }
         
-        let currentContextName = this.options.GetGlobalArgs(1);
+        let currentContextName = this.options.getGlobalArgs(1);
         if (!currentContextName) {
             let choices = Object.keys(this._configSettings)
                 .filter(k => typeof this._configSettings[k] === "object")
