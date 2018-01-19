@@ -22,6 +22,7 @@ const pkg = require('../package.json');
 updateNotifier({ pkg }).notify({ defer: false });
 
 console.log(`Apotek ${pkg.version}`);
+console.log("Use Apotek help for more info");
 
 const options = new Options();
 const main = new Apotek();

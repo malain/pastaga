@@ -9,6 +9,7 @@ export interface IManifest {
     state?: any
     description?: string;
     dependencies?: string[];
+    order?: number;
 }
 
 export class Utils {
@@ -38,11 +39,11 @@ export class Utils {
     }
 
     static getCommands(commandFolder: string): IManifest[] {
-        return Array.from(Utils.getTemplatesInternal(commandFolder, false));
+        return Array.from(Utils.getTemplatesInternal(commandFolder, false)).sort((a,b) => (b.order||100) - (a.order||100));
     }
     
     static getTemplates(templatesFolder: string): IManifest[] {
-        return Array.from(Utils.getTemplatesInternal(templatesFolder, true));
+        return Array.from(Utils.getTemplatesInternal(templatesFolder, true)).sort((a,b) => (b.order||100) - (a.order||100));
     }
     
     private static *getTemplatesInternal(templatesFolder: string, recurse=true, templateName = ""): IterableIterator<IManifest> {
@@ -96,7 +97,7 @@ export class Utils {
         let names = fs.readdirSync(templatesFolder);
         for (let name of names) {
             try {
-                if (name[0] === "." || name[0] === "$")
+                if (name[0] === "." || name[0] === "$" || name === "node_modules")
                     continue;
 
                 const fullName = Path.join(templatesFolder, name);

@@ -1,6 +1,6 @@
 {
   "name": "apotek",
-  "version": "1.0.0-beta904",
+  "version": "1.0.0-beta905",
   "description": "",
   "main": "lib/Apotek.js",
   "dependencies": {

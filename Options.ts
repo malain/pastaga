@@ -4,7 +4,7 @@ import * as shell from 'shelljs';
 import { Utils } from './Utils';
 
 export interface IOptions {
-    getOptions(name?: string): string[];
+    getOptions(name?: string): string[]|any;
     getCommand(): string;
     getGlobalArgs(idx: number): string;
     isTestMode(): boolean;
@@ -18,7 +18,7 @@ export class TestOptions implements IOptions {
     constructor(private commandName: string, private state: any) {
         const cwd = shell.pwd().toString();
         this._folders = { cwd, apotek: cwd };
-        state.outputFolder = Path.join(this._folders.cwd, "generated");
+        state.outputFolder = Path.join(this._folders.cwd, ".generated");
     }
 
     getOptions(name?: string): string[] {
@@ -31,7 +31,9 @@ export class TestOptions implements IOptions {
     getGlobalArgs(idx: number): string {
         throw new Error("Method not implemented.");
     }
+
     isTestMode() { return true; }
+
     public get apotekFolder() {
         return this._folders.apotek;
     }
@@ -77,5 +79,6 @@ export class Options implements IOptions {
         let g = (this._args.length >= idx + 1 && this._args[idx]) || null;
         return g;
     }
+
     isTestMode() { return false;}
 }

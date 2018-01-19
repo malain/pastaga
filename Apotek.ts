@@ -31,8 +31,8 @@ export default class Apotek {
             console.log(e.message);
         }
 
-        let cm = new CloneManager(options.apotekFolder);
-        if (!options.isTestMode && !(options.apotekFolder = cm.clone(contextManager.currentContext["address"], contextManager.currentContext["branch"]))) {
+        let cm = new CloneManager(options, contextManager);
+        if (!cm.clone()) {
             return;
         }
         console.log('');
@@ -56,7 +56,7 @@ export default class Apotek {
             let state = contextManager.getState();
             let commandFolder = options.apotekFolder;
             while (command) {
-                const cmd = commands.find(c => c.value === command);
+                const cmd = commands.find(c => c.value.toLowerCase() === command.toLowerCase());
                 if (!cmd) {
                     console.log("Unknown command " + command);
                     return;

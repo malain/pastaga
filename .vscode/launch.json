@@ -12,7 +12,7 @@
                 "${workspaceFolder}/lib/**/*.js"
             ],
             "args": [
-                "init"
+                "--context", "test", "--unset", "address",  "--unset", "address"
             ]
         }
     ]
