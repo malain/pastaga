@@ -29,8 +29,9 @@ Repositories are synchronized on every execution.
 
 ### How to use it
 
-**Apotek** has been initially created to use with [vulcainjs project](http://www.vulcainjs.org/). 
-A **default** context is defined referencing the [vulcainjs code template repository](https://github.com/vulcainjs/vulcain-code-generation-templates). 
+**Apotek** has been initially created to use with [vulcainjs project](http://www.vulcainjs.org/).
+
+A **default** context is defined referencing the [vulcainjs code template repository](https://github.com/vulcainjs/vulcain-code-generation-templates).
 
 This repository provides commands for initialize a new project or generate artefacts. This is a good example to see how to create your own commands.
 
@@ -58,8 +59,8 @@ For example, try ```apotek init --template vulcain-service``` to create a new **
 
   4. Commit and publish your changes
   5. Set **Apotek** to use your context with: ```apotek context mycontext --address <git repository address>```
-  6. Run **Apotek** with 
-  
+  6. Run **Apotek** with
+
    ```apotek``` : Display a list of commands to select. In this case, only one : **MyCommand**
 
    ```apotek MyCommand``` : Run directly your command by requesting your name.
@@ -82,8 +83,9 @@ You can add an optional **manifest.json** file close to the **index.js** to cust
 ### Command context class
 
 Context class inherit two properties:
+
 - state which contains every command options (from initial state and prompts)
-- context object exposing execution context properties. See [source code](Executor) for details.
+- context object exposing execution context properties. See [source code](Executor.ts) for details.
 
 **exec** can return a command name which will be executed in the current context.
 
@@ -99,9 +101,10 @@ Using a generator function allows you to change question based on the previous a
 
 ### Execution context
 
-You can switch between context with ```apotek context <name>```` 
+You can switch between context with ```apotek context <name>```
+
 You can update a context with ```apotek context <name> [--address <address>] [--branch <branch>] [--set key=value]*```
+
 **set** is used to set global initial state. Use ```unset key``` to remove a value.
 
 You can force a context in a command scope by adding ```--context <name>``` to the command line.
-
