@@ -9,15 +9,15 @@ export interface IOptions {
     getGlobalArgs(idx: number): string;
     isTestMode(): boolean;
     currentFolder: string;
-    apotekFolder: string;
+    pastagaFolder: string;
 }
 
 export class TestOptions implements IOptions {
-    private _folders: { cwd: string, apotek: string };
+    private _folders: { cwd: string, pastaga: string };
 
     constructor(private commandName: string, private state: any) {
         const cwd = shell.pwd().toString();
-        this._folders = { cwd, apotek: cwd };
+        this._folders = { cwd, pastaga: cwd };
         state.outputFolder = Path.join(this._folders.cwd, ".generated");
     }
 
@@ -34,8 +34,8 @@ export class TestOptions implements IOptions {
 
     isTestMode() { return true; }
 
-    public get apotekFolder() {
-        return this._folders.apotek;
+    public get pastagaFolder() {
+        return this._folders.pastaga;
     }
 
     public get currentFolder() {
@@ -46,21 +46,21 @@ export class TestOptions implements IOptions {
 export class Options implements IOptions {
     private _args: any;
     private _options: any;
-    private _folders: { cwd: string, apotek: string };
+    private _folders: { cwd: string, pastaga: string };
 
     constructor() {
-        this._folders = Utils.ensuresApotekFolder();
+        this._folders = Utils.ensuresPastagaFolder();
         this._options = minimist(process.argv.slice(2));
         this._args = this._options["_"] || [];
         delete this._options["_"];
     }
 
-    public get apotekFolder() {
-        return this._folders.apotek;
+    public get pastagaFolder() {
+        return this._folders.pastaga;
     }
 
-    public set apotekFolder(val:string) {
-        this._folders.apotek=val;
+    public set pastagaFolder(val:string) {
+        this._folders.pastaga=val;
     }
 
     public get currentFolder() {

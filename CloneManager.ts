@@ -21,7 +21,7 @@ export class CloneManager {
         if (gitUrl) {
             const folder = this.contextManager.currentContext.name;
             console.log(chalk.gray("Updating templates from " + gitUrl));
-            shell.cd(this.options.apotekFolder);
+            shell.cd(this.options.pastagaFolder);
             try {
                 if ((<any>shell.exec(`git clone ${gitUrl} ${folder}`, { silent: true })).code > 0) {
                     shell.cd(folder);
@@ -32,7 +32,7 @@ export class CloneManager {
                 }
 
                 shell.exec("git checkout " + branch, { silent: true });
-                this.options.apotekFolder = Path.join(this.options.apotekFolder, folder);
+                this.options.pastagaFolder = Path.join(this.options.pastagaFolder, folder);
                 return true;
             }
             finally {
@@ -43,6 +43,6 @@ export class CloneManager {
     }
 
     public getCommands() {
-        return Utils.getCommands(this.options.apotekFolder);
+        return Utils.getCommands(this.options.pastagaFolder);
     }
 }

@@ -15,7 +15,7 @@ export interface ExecutionContext {
     dependencies?: string[];
 }
 
-export default class Apotek {
+export default class Pastaga {
 
     public test(commandName: string, state: any) {
         return this.run(new TestOptions(commandName, state));
@@ -54,7 +54,7 @@ export default class Apotek {
             }
 
             let state = contextManager.getState();
-            let commandFolder = options.apotekFolder;
+            let commandFolder = options.pastagaFolder;
             while (command) {
                 const cmd = commands.find(c => c.value.toLowerCase() === command.toLowerCase());
                 if (!cmd) {

@@ -1,8 +1,8 @@
 {
-  "name": "apotek",
-  "version": "1.0.0-beta905",
+  "name": "pastaga",
+  "version": "1.0.0-beta01",
   "description": "",
-  "main": "lib/Apotek.js",
+  "main": "lib/Pastaga.js",
   "dependencies": {
     "chalk": "^2.3.0",
     "ejs": "^2.5.7",
@@ -27,11 +27,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/malain/apotek.git"
+    "url": "https://github.com/malain/pastaga.git"
   },
   "preferGlobal": true,
   "bin": {
-    "apotek": "lib/index.js"
+    "pastaga": "lib/index.js"
   },
   "files": [
     "lib"

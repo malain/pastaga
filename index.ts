@@ -13,7 +13,7 @@
 //
 //    Copyright (c) Alain Metge
 //
-import Apotek from "./Apotek";
+import Pastaga from "./Pastaga";
 import { Options } from "./Options";
 
 const updateNotifier = require('update-notifier');
@@ -21,9 +21,9 @@ const pkg = require('../package.json');
 
 updateNotifier({ pkg }).notify({ defer: false });
 
-console.log(`Apotek ${pkg.version}`);
-console.log("Use Apotek help for more info");
+console.log(`Pastaga ${pkg.version}`);
+console.log("Use Pastaga help for more info");
 
 const options = new Options();
-const main = new Apotek();
+const main = new Pastaga();
 main.run(options);

@@ -1,7 +1,7 @@
 import * as Path from 'path';
 import { Utils, IManifest } from './Utils';
 import * as shell from 'shelljs';
-import { ExecutionContext } from './Apotek';
+import { ExecutionContext } from './Pastaga';
 
 const inquirer =require('inquirer');
 const fs = require('fs');

@@ -13,25 +13,25 @@ export interface IManifest {
 }
 
 export class Utils {
-    public static ensuresApotekFolder() {
+    public static ensuresPastagaFolder() {
         const cwd = shell.pwd().toString();
-        let apotek: string;
+        let pastaga: string;
         let silentState = shell.config.silent;
         shell.config.silent = true;
         try {
-            shell.cd("~/.apotek");
+            shell.cd("~/.pastaga");
             if (shell.error()) {
-                shell.mkdir("~/.apotek");
-                shell.cd("~/.apotek");
+                shell.mkdir("~/.pastaga");
+                shell.cd("~/.pastaga");
             }
-            apotek = shell.pwd().toString();
+            pastaga = shell.pwd().toString();
         }
         finally {
             shell.config.silent = silentState;
             shell.cd(cwd);
         }
 
-        return { cwd, apotek };
+        return { cwd, pastaga };
     }
 
     private static makeTemplateName(base: string, name: string) {

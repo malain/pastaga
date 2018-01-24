@@ -1,16 +1,16 @@
-## Apotek
+## Pastaga
 
 Simple scaffolding tool using git repository for providing templates.
 
 ```js
-npm i -g apotek
+npm i -g pastaga
 ```
 
 > Requires node > 6.0
 
 ### Concepts
 
-**Apotek** does not provide any generator but it synchronizes with git repository to execute code.
+**Pastaga** does not provide any generator but it synchronizes with git repository to execute code.
 
 Repository must respect the following specific structure :
 
@@ -29,13 +29,13 @@ Repositories are synchronized on every execution.
 
 ### How to use it
 
-**Apotek** has been initially created to use with [vulcainjs project](http://www.vulcainjs.org/).
+**Pastaga** has been initially created to use with [vulcainjs project](http://www.vulcainjs.org/).
 
 A **default** context is defined referencing the [vulcainjs code template repository](https://github.com/vulcainjs/vulcain-code-generation-templates).
 
 This repository provides commands for initialize a new project or generate artefacts. This is a good example to see how to create your own commands.
 
-For example, try ```apotek init --template vulcain-service``` to create a new **vulcainjs** micro service.
+For example, try ```pastaga init --template vulcain-service``` to create a new **vulcainjs** micro service.
 
 ### How to create its own commands
 
@@ -58,14 +58,14 @@ For example, try ```apotek init --template vulcain-service``` to create a new **
   ```
 
   4. Commit and publish your changes
-  5. Set **Apotek** to use your context with: ```apotek context mycontext --address <git repository address>```
-  6. Run **Apotek** with
+  5. Set **Pastaga** to use your context with: ```pastaga context mycontext --address <git repository address>```
+  6. Run **Pastaga** with
 
-   ```apotek``` : Display a list of commands to select. In this case, only one : **MyCommand**
+   ```pastaga``` : Display a list of commands to select. In this case, only one : **MyCommand**
 
-   ```apotek MyCommand``` : Run directly your command by requesting your name.
+   ```pastaga MyCommand``` : Run directly your command by requesting your name.
 
-   ```apotek MyCommand --name Boy``` : Execute your command and display **Hello Boy**
+   ```pastaga MyCommand --name Boy``` : Execute your command and display **Hello Boy**
 
 #### Manifest.json
 
@@ -101,9 +101,9 @@ Using a generator function allows you to change question based on the previous a
 
 ### Execution context
 
-You can switch between context with ```apotek context <name>```
+You can switch between context with ```pastaga context <name>```
 
-You can update a context with ```apotek context <name> [--address <address>] [--branch <branch>] [--set key=value]*```
+You can update a context with ```pastaga context <name> [--address <address>] [--branch <branch>] [--set key=value]*```
 
 **set** is used to set global initial state. Use ```unset key``` to remove a value.
 

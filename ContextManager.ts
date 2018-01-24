@@ -25,7 +25,7 @@ export class ContextManager
         let flag = true;
         let currentContextName;
         let saveConfigs = false;
-        const settingsFile = Path.join(this.options.apotekFolder, "settings.json");
+        const settingsFile = Path.join(this.options.pastagaFolder, "settings.json");
         if (fs.existsSync(settingsFile)) {
             this._configSettings = JSON.parse(fs.readFileSync(settingsFile, "utf8"));
         }
@@ -83,7 +83,7 @@ export class ContextManager
                     return true;
             
                 saveConfigs = true;
-                shell.rm("-rf", Path.join(this.options.apotekFolder, currentContextName));
+                shell.rm("-rf", Path.join(this.options.pastagaFolder, currentContextName));
             
                 this._configSettings[currentContextName] = undefined;
                 currentContextName = this._configSettings.defaultContext = "default";
@@ -105,10 +105,10 @@ export class ContextManager
 
                 if (this.processOption("address")) {
                     saveConfigs = true;
-                    console.log(chalk.cyan("SECURITY WARNING: You have added a new repository reference to use with Apotek."));
+                    console.log(chalk.cyan("SECURITY WARNING: You have added a new repository reference to use with Pastaga."));
                     console.log(chalk.cyan("SECURITY WARNING: Ensure this repository is safe and it not run malicious code."));
                     console.log(chalk.cyan("SECURITY WARNING: Pay attention that this repository will be refreshed every time you use it."));
-                    console.log(chalk.cyan("SECURITY WARNING: In doubt, do not use this repository with Apotek or use it has your own risk."));
+                    console.log(chalk.cyan("SECURITY WARNING: In doubt, do not use this repository with Pastaga or use it has your own risk."));
                     console.log("");
                 }
 
@@ -189,8 +189,8 @@ export class ContextManager
     }
 
     private displayHelp() {
-        console.log("apotek context <context> [--address <url>] [--branch <branch>] [--set <key=value>] [--unset <value>]");
-        console.log("apotek [--context <context>] [command] [options]");
+        console.log("pastaga context <context> [--address <url>] [--branch <branch>] [--set <key=value>] [--unset <value>]");
+        console.log("pastaga [--context <context>] [command] [options]");
         console.log("");
     }
 }

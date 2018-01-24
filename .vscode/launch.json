@@ -12,7 +12,6 @@
                 "${workspaceFolder}/lib/**/*.js"
             ],
             "args": [
-                "--context", "test", "--unset", "address",  "--unset", "address"
             ]
         }
     ]
