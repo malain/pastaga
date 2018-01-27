@@ -1,6 +1,6 @@
 ## Pastaga
 
-Simple scaffolding tool using git repository for providing templates.
+Simple scaffolding tool using git repositories to provide templates.
 
 ```js
 npm i -g pastaga
@@ -10,9 +10,9 @@ npm i -g pastaga
 
 ### Concepts
 
-**Pastaga** does not provide any generator but it synchronizes with git repository to execute code.
+**Pastaga** does not provide any generator but it synchronizes with a git repository to execute code.
 
-Repository must respect the following specific structure :
+Repository must respect the following structure :
 
 ```
 \
@@ -24,8 +24,8 @@ Repository must respect the following specific structure :
  ...
 ```
 
-You can create many context each with a different repository.
-Repositories are synchronized on every execution.
+You can create as many contexts as required, each context having its own dedicated repository.
+Beware that repositories are synchronized on every execution.
 
 ### How to use it
 
@@ -33,15 +33,15 @@ Repositories are synchronized on every execution.
 
 A **default** context is defined referencing the [vulcainjs code template repository](https://github.com/vulcainjs/vulcain-code-generation-templates).
 
-This repository provides commands for initialize a new project or generate artefacts. This is a good example to see how to create your own commands.
+This repository provides commands to initialize a new project or generate artefacts. This is a good example to see how to create your own commands.
 
-For example, try ```pastaga init --template vulcain-service``` to create a new **vulcainjs** micro service.
+For example, you can invoke ```pastaga init --template vulcain-service``` to create a new **vulcainjs** micro service.
 
-### How to create its own commands
+### How to create your own commands
 
   1. Create a new github repository
-  2. Add a folder named 'MyCommand'
-  3. Add it a file named index.js with the following code.
+  2. Create a new folder named 'MyCommand'
+  3. In this folder, add a file named index.js with the following code :
 
   ```js
   class Context {
@@ -63,13 +63,13 @@ For example, try ```pastaga init --template vulcain-service``` to create a new *
 
    ```pastaga``` : Display a list of commands to select. In this case, only one : **MyCommand**
 
-   ```pastaga MyCommand``` : Run directly your command by requesting your name.
+   ```pastaga MyCommand``` : Run your command, ask for your name and display result.
 
-   ```pastaga MyCommand --name Boy``` : Execute your command and display **Hello Boy**
+   ```pastaga MyCommand --name Boy``` : Run your command with parameters and display **Hello Boy**
 
 #### Manifest.json
 
-You can add an optional **manifest.json** file close to the **index.js** to customize your command. The following properties are allowed:
+You can add an optional **manifest.json** file in the same folder as **index.js** to customize your command. The following properties are allowed:
 
 | Name | Description | Default value |
 |-----|-----|------|
@@ -93,15 +93,15 @@ Context class inherit two properties:
 
 **Prompts** uses [inquirer](https://github.com/SBoudrias/Inquirer.js).
 
-Prompts are made in order thanks to the generator function.
+Prompts are executed in order thanks to the generator function.
 
 Using a generator function allows you to change question based on the previous answer.
 
-> Prompt are displayed only if there is no value defined.
+> Prompts are displayed only if no value is provided when invoked.
 
 ### Execution context
 
-You can switch between context with ```pastaga context <name>```
+You can switch between contexts with ```pastaga context <name>```
 
 You can update a context with ```pastaga context <name> [--address <address>] [--branch <branch>] [--set key=value]*```
 

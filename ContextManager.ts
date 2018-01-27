@@ -74,7 +74,7 @@ export class ContextManager
                 }
             
                 if (currentContextName === "default") {
-                    console.log(chalk.red("You can not remove default context"));
+                    console.log(chalk.red("You cannot remove default context"));
                     return true;
                 }
 
@@ -106,8 +106,8 @@ export class ContextManager
                 if (this.processOption("address")) {
                     saveConfigs = true;
                     console.log(chalk.cyan("SECURITY WARNING: You have added a new repository reference to use with Pastaga."));
-                    console.log(chalk.cyan("SECURITY WARNING: Ensure this repository is safe and it not run malicious code."));
-                    console.log(chalk.cyan("SECURITY WARNING: Pay attention that this repository will be refreshed every time you use it."));
+                    console.log(chalk.cyan("SECURITY WARNING: Make sure that this repository is safe and it does not run malicious code."));
+                    console.log(chalk.cyan("SECURITY WARNING: Pay attention that it will be refreshed every time you use it."));
                     console.log(chalk.cyan("SECURITY WARNING: In doubt, do not use this repository with Pastaga or use it has your own risk."));
                     console.log("");
                 }

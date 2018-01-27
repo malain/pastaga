@@ -103,7 +103,7 @@ export class Utils {
                 const fullName = Path.join(templatesFolder, name);
                 const stat = fs.statSync(fullName);
                 if (!stat.isDirectory())
-                    continue;          
+                    continue;
                 yield name;
             }
             catch (e) {
