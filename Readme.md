@@ -37,7 +37,7 @@ This repository provides commands for initialize a new project or generate artef
 
 For example, try ```pastaga init --template vulcain-service``` to create a new **vulcainjs** micro service.
 
-### How to create its own commands
+### How to create commands
 
   1. Create a new github repository
   2. Add a folder named 'MyCommand'
